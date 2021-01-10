@@ -12,7 +12,7 @@ library(DBI)
 conn = dbConnect(odbc::odbc(), .connection_string="Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=c:/path/to/database.accdb")
 # Error: nanodbc/nanodbc.cpp:1021: IM002: [Microsoft][ODBC Driver Manager] Data source name not found and no default driver specified 
 ```
-To make it work one would have to either redo the same thing from 32-bit R but then your analyses will be limited to 2Gb memory. One could also just use the `odbc32` package: 
+This is not `odbc`'s fault since it is the 64-bit driver that is missing. To make it work one would have to either redo the same thing from 32-bit R but then your analyses will be limited to 2Gb memory. One could also just use the `odbc32` package: 
 
 ```R
 library(DBI)
@@ -21,7 +21,7 @@ conn = dbConnect(odbc32::odbc32(), .connection_string="Driver={Microsoft Access 
 
 df = dbReadTable(conn, "table1")
 
-dbExecute(conn, "insert into table1 values (?, ?)", params = list(col1 = 1:10, col2 = letters[1:10]))
+dbExecute(conn, "insert into table1 values (?, ?)", params = list(1:10, letters[1:10]))
 
 dbDisconnect(conn)
 
